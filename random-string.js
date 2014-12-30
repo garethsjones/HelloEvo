@@ -4,13 +4,13 @@
  * Time: 19:08
  */
 
-module.exports = function(maxLenth) {
+module.exports = function(maxLength) {
 
-    var length = Math.floor(Math.random() * maxLenth) + 1
-    var text = "";
+    var length = Math.floor(Math.random() * maxLength) + 1,
+        text = "";
 
     for( var i=0; i < length; i++ )
-        text += String.fromCharCode(Math.floor(Math.random() * 129));
+        text += String.fromCharCode(Math.floor(Math.random() * 256));
 
     return text;
 };

@@ -5,7 +5,6 @@
  */
 
 module.exports = function (daddy, mummy) {
-    //console.log('Daddy: ' + daddy, 'Mummy: ' + mummy);
 
     var offspringLength = Math.floor((daddy.length + mummy.length + Math.random() + 0.5) / 2);
     var offspring = [];
@@ -22,6 +21,5 @@ module.exports = function (daddy, mummy) {
     }
 
     offspring = offspring.join('');
-    //console.log('Offspring: ' + offspring);
     return offspring;
 };

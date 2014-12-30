@@ -4,20 +4,24 @@
  * Time: 14:15
  */
 
-var maxPopulation = 20;
-var goal = 'Hello, World!';
+var goal = 'Hello, World!',
+    maxGenerations = 50000,
+    maxPopulation = 20,
+    maxContentMutationsPerGeneration = 10,
+    chanceOfContentMutation = 0.8,
+    maxLengthMutationsPerGeneration = 1,
+    chanceOfLengthMutation = 0.3;
+
 var fitness = require('./fitness')(goal);
-var population = [];
-
 var mutators = [];
-mutators.push(require('./mutate-content')(10, 0.8));
-mutators.push(require('./mutate-length')(1, 0.3));
-
+mutators.push(require('./mutate-content')(maxContentMutationsPerGeneration, chanceOfContentMutation));
+mutators.push(require('./mutate-length')(maxLengthMutationsPerGeneration, chanceOfLengthMutation));
 var breed = require('./breed');
 
+var population = [];
 for (var i = 0; i < maxPopulation; i++) {
     var candidate = {};
-    candidate.string = require('./random-string')(20);
+    candidate.string = require('./random-string')(goal.length * 2);
     candidate.fitness = fitness(candidate.string);
     candidate.generation = 0;
     population.push(candidate);
@@ -30,8 +34,6 @@ while (population[0].fitness != 0) {
 
     var daddyIndex = pickIndex([]);
     var mummyIndex = pickIndex([daddyIndex]);
-
-    //console.log('Daddy ' + daddyIndex, 'Mummy ' + mummyIndex);
 
     var daddy = population[daddyIndex];
     var mummy = population[mummyIndex];
@@ -51,8 +53,15 @@ while (population[0].fitness != 0) {
     population.sort(sortByFitness);
     population.splice(-1, 1);
 
-    console.log(generation + ' ' + offspring.string);
+    console.log(generation + ' ' + offspring.string + '\t' + population[0].string + '\t' + population[0].fitness);
+
+    if (generation >= maxGenerations) {
+        console.log("Failed to reach " + goal + " in " + maxGenerations + " generations");
+        return population[0].fitness;
+    }
 }
+
+return 0;
 
 function sortByFitness(a, b) {
     return a.fitness - b.fitness;
